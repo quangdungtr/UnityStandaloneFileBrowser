@@ -288,12 +288,12 @@ void DialogSaveFilePanelAsync(bool isEditor,
     return @"";
 }
 
-- (void)dialogSaveFilePanel:(NSString*)goName
-                 methodName:(NSString*)methodName
-                      title:(NSString*)title
-                  directory:(NSString*)directory
-                defaultName:(NSString*)defaultName
-                    filters:(NSString*)filters {
+- (void)dialogSaveFilePanelAsync:(NSString*)goName
+                      methodName:(NSString*)methodName
+                           title:(NSString*)title
+                       directory:(NSString*)directory
+                     defaultName:(NSString*)defaultName
+                         filters:(NSString*)filters {
     NSSavePanel* panel = [self createSavePanel:title
                                      directory:directory
                                    defaultName:defaultName
