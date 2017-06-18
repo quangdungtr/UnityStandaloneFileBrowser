@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Ookii.Dialogs;
+using UnityEngine;
 
 
 namespace SFB {
@@ -18,10 +19,10 @@ namespace SFB {
         public IntPtr Handle { get { return _hwnd; } }
     }
 
-    public class StandaloneFileBrowserWindows : IStandaloneFileBrowser {
+    public class StandaloneFileBrowserWindows : MonoBehaviour, IStandaloneFileBrowser {
         [DllImport("user32.dll")]
         private static extern IntPtr GetActiveWindow();
-        
+
         public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect) {
             var fd = new VistaOpenFileDialog();
             fd.Title = title;

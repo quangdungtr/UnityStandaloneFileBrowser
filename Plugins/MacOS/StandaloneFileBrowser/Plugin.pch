@@ -2,10 +2,31 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
+typedef void *MonoDomain;
+typedef void *MonoAssembly;
+typedef void *MonoImage;
+typedef void *MonoObject;
+typedef void *MonoMethodDesc;
+typedef void *MonoMethod;
+typedef void *MonoString;
+
 extern "C" {
-    const char* DialogOpenFilePanel(const char*, const char*, const char*, bool multiselect);
-    const char* DialogOpenFolderPanel(const char*, const char*, bool multiselect);
+    MonoDomain *mono_domain_get();
+    MonoAssembly *mono_domain_assembly_open(MonoDomain *domain, const char *assemblyName);
+    MonoImage *mono_assembly_get_image(MonoAssembly *assembly);
+    MonoMethodDesc *mono_method_desc_new(const char *methodString, int useNamespace);
+    MonoMethodDesc *mono_method_desc_free(MonoMethodDesc *desc);
+    MonoMethod *mono_method_desc_search_in_image(MonoMethodDesc *methodDesc, MonoImage *image);
+    MonoObject *mono_runtime_invoke(MonoMethod *method, void *obj, void **params, MonoObject **exc);
+    MonoString *mono_string_new(MonoDomain *domain, const char *text);
+
+    const char* DialogOpenFilePanel(const char*, const char*, const char*, bool);
+    const char* DialogOpenFolderPanel(const char*, const char*, bool);
     const char* DialogSaveFilePanel(const char*, const char*, const char*, const char*);
+
+    void DialogOpenFilePanelAsync(bool isEditor, const char*, const char*, const char*, const char*, const char*, bool);
+    void DialogOpenFolderPanelAsync(bool isEditor, const char*, const char*, const char*, const char*, bool);
+    void DialogSaveFilePanelAsync(bool isEditor, const char*, const char*, const char*, const char*, const char*, const char*);
 }
 
 @interface PopUpButtonHandler : NSObject {
@@ -25,6 +46,7 @@ extern "C" {
 @interface StandaloneFileBrowser : NSObject {
 }
 - (id)init;
+
 - (NSString*)dialogOpenFilePanel:(NSString*)title
                        directory:(NSString*)directory
                          filters:(NSString*)filters
@@ -32,10 +54,38 @@ extern "C" {
                   canChooseFiles:(BOOL)canChooseFiles
                 canChooseFolders:(BOOL)canChooseFolders;
 
+- (void)dialogOpenFilePanelAsync:(NSString*)goName
+                      methodName:(NSString*)methodName
+                           title:(NSString*)title
+                       directory:(NSString*)directory
+                         filters:(NSString*)filters
+                     multiselect:(BOOL)multiselect
+                  canChooseFiles:(BOOL)canChooseFiles
+                canChooseFolders:(BOOL)canChooseFolders;
+
+- (NSOpenPanel*)createOpenPanel:(NSString*)title
+                      directory:(NSString*)directory
+                        filters:(NSString*)filters
+                    multiselect:(BOOL)multiselect
+                 canChooseFiles:(BOOL)canChooseFiles
+               canChooseFolders:(BOOL)canChooseFolders;
+
 - (NSString*)dialogSaveFilePanel:(NSString*)title
                        directory:(NSString*)directory
                      defaultName:(NSString*)defaultName
                          filters:(NSString*)filters;
+
+- (void)dialogSaveFilePanelAsync:(NSString*)goName
+                      methodName:(NSString*)methodName
+                           title:(NSString*)title
+                       directory:(NSString*)directory
+                     defaultName:(NSString*)defaultName
+                         filters:(NSString*)filters;
+
+- (NSSavePanel*)createSavePanel:(NSString*)title
+                      directory:(NSString*)directory
+                    defaultName:(NSString*)defaultName
+                        filters:(NSString*)filters;
 
 - (void)parseFilter:(NSString*)filter
             filters:(NSMutableArray*)filters
