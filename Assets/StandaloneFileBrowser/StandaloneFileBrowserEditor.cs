@@ -20,8 +20,7 @@ namespace SFB {
         }
 
         public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<string[]> cb) {
-            var paths = OpenFilePanel(title, directory, extensions, multiselect);
-            cb.Invoke(paths);
+            cb.Invoke(OpenFilePanel(title, directory, extensions, multiselect));
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect) {
@@ -30,8 +29,7 @@ namespace SFB {
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb) {
-            var paths = OpenFolderPanel(title, directory, multiselect);
-            cb.Invoke(paths);
+            cb.Invoke(OpenFolderPanel(title, directory, multiselect));
         }
 
         public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions) {
@@ -41,8 +39,7 @@ namespace SFB {
         }
 
         public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<string> cb) {
-            var path = SaveFilePanel(title, directory, defaultName, extensions);
-            cb.Invoke(path);
+            cb.Invoke(SaveFilePanel(title, directory, defaultName, extensions));
         }
 
         // EditorUtility.OpenFilePanelWithFilters extension filter format

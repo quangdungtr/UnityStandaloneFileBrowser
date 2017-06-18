@@ -37,10 +37,15 @@ namespace SFB {
             if (!string.IsNullOrEmpty(directory)) {
                 fd.FileName = GetDirectoryPath(directory);
             }
+
             var res = fd.ShowDialog(new WindowWrapper(GetActiveWindow()));
             var filenames = res == DialogResult.OK ? fd.FileNames : new string[0];
             fd.Dispose();
             return filenames;
+        }
+
+        public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<string[]> cb) {
+            cb.Invoke(OpenFilePanel(title, directory, extensions, multiselect));
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect) {
@@ -53,6 +58,10 @@ namespace SFB {
             var filenames = res == DialogResult.OK ? new []{ fd.SelectedPath } : new string[0];
             fd.Dispose();
             return filenames;
+        }
+
+        public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb) {
+            cb.Invoke(OpenFolderPanel(title, directory, multiselect));
         }
 
         public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions) {
@@ -85,6 +94,10 @@ namespace SFB {
             var filename = res == DialogResult.OK ? fd.FileName : "";
             fd.Dispose();
             return filename;
+        }
+
+        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<string> cb) {
+            cb.Invoke(SaveFilePanel(title, directory, defaultName, extensions));
         }
 
         // .NET Framework FileDialog Filter format
